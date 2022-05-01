@@ -26,44 +26,16 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
-	# To set up a stack, we simply set the esp register to point to the top of
-	# our stack (as it grows downwards).
 	movl $stack_top, %esp
 
-	# We are now ready to actually execute Go code. Functions that start with a
-	# capital letter are exported as "go.<package>.<function>".
 	call go.kernel.Main
 
-	# In case the function returns, we'll want to put the computer into an
-	# infinite loop.
 	cli
 	hlt
 .Lhang:
 	jmp .Lhang
 
-# Set the size of the _start symbol to the current location '.' minus its start.
-# This is useful when debugging or when you implement call tracing.
 .size _start, . - _start
-
-# The Go runtime is a big problem when wanting to write a kernel in Go.
-# Although not impossible, it's certainly not trivial. At the very least
-# you'd need to implement parts of libc that it uses. Porting the runtime
-# goes way beyond the scope of this barebone. 
-#
-# Beware that there are almost no language features you can use at this point.
-# The linker will fail with missing symbols when you try to use them.
-#
-# You have to implement those missing symbols yourself to get things working.
-# Sometimes you can get away with declaring them as an empty function. 
-# But this won't always work.
-#
-# After you get this bare bone working, the first priority should be to write
-# your own memory allocator. A simple sbrk implementation should suffice for
-# symbols like __go_new.
-#
-# For now we just implement the symbols below as empty functions to get this
-# barebone up and running.
-#
 
 .global __go_register_gc_roots
 .type __go_register_gc_roots, @function
