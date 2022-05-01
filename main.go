@@ -14,3 +14,5 @@ func Main() {
 	// Print our Hello, World!
 	terminal.Print("Hello, Kernel World!\n")
 }
+
+// See https://wiki.osdev.org/Go_Bare_Bones

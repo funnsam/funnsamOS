@@ -83,3 +83,5 @@ func Print(s string) {
 		Poke(byte(s[c]))
 	}
 }
+
+// See https://wiki.osdev.org/Go_Bare_Bones
