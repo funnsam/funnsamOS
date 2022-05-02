@@ -49,4 +49,4 @@ __go_runtime_error:
 	ret
 .size __go_runtime_error, . - __go_runtime_error
 
-// See https://wiki.osdev.org/Go_Bare_Bones
+# See https://wiki.osdev.org/Go_Bare_Bones
