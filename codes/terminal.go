@@ -58,7 +58,7 @@ func Clear() {
 }
 
 func Poke(c byte) {
-	if c == "\n" {
+	if c == 0x0D {
 		Column = 0
 		Row++
 		if Row > 24 {
