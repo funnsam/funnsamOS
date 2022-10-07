@@ -1,2 +1,2 @@
 # funnsamOS
-My OS
+Yet another OS/ kernal thingy
