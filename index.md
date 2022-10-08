@@ -6,4 +6,4 @@ The bloat-less 64-bits OS
 |AMD64         | none         | none            | Yes        |
 |ARM Mac       | none         | none            | No         |
 
-### Not sure what to download? See Q&A
+### Not sure what to download? See [Q&A](./QNA/)
