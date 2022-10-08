@@ -1,5 +1,3 @@
-The bloat-less 64-bits OS
-
 # Downloads
 | Architecture | ISO Download | Source Download | Mainstream |
 |--------------|--------------|-----------------|------------|
