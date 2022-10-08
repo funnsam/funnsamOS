@@ -1,2 +1,4 @@
-markdown: kramdown
+markdown: GFM
 theme: minima
+minima:
+  skin: dark
