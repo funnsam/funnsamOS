@@ -13,3 +13,4 @@ Run ./make.sh on root
 - Mouse Support
 - Use Graphics Mode (800x600, 16-bits RGB)
 - UEFI Support
+- 64-bits
