@@ -1,4 +1,3 @@
-# funnsam OS
 The bloat-less 64-bits OS
 
 # Downloads
