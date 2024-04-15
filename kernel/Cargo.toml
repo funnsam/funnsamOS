@@ -1,0 +1,13 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bootloader_api = "0.11.3"
+bootloader-x86_64-uefi = "0.11.3"
+lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
+x86_64 = "0.14.10"
+uart_16550 = "0.2.18"
+good_memory_allocator = "0.1.7"
+backtrace = { version = "0.3.71", default-features = false }
