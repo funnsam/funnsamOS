@@ -62,14 +62,14 @@ pub unsafe fn draw_pixel(px: usize, py: usize, pc: Color) {
 }
 
 pub unsafe fn batch_draw(px: usize, py: usize, sx: usize, sy: usize, pd: &[Color]) {
-    let fb   = get_framebuffer();
+    let fb = get_framebuffer();
     let info = get_framebuffer_info();
     let mut _i = (px + info.stride * py) * info.bytes_per_pixel;
-    let mut j  = 0;
+    let mut j = 0;
 
-    for _y in 0..sy {
+    for _ in 0..sy {
         let mut i = _i;
-        for _x in 0..sx {
+        for _ in 0..sx {
             plot_color(i, pd[j], fb);
 
             i += info.bytes_per_pixel;
@@ -119,7 +119,7 @@ pub unsafe fn putc(c: char) {
         '\n' => new_line(),
         _ => {
             let s = PSF_FONT.as_ref().unwrap().glyph_size();
-            putc_at(CONSOLE_X * s.0 as usize, CONSOLE_Y * s.1 as usize, c as u32);
+            putc_at(CONSOLE_X * s.0 as usize, CONSOLE_Y * s.1 as usize, c);
 
             if CONSOLE_X >= CONSOLE_XSIZE { new_line(); } else { CONSOLE_X += 1; }
         }
@@ -131,32 +131,38 @@ pub unsafe fn new_line() {
     CONSOLE_Y = (CONSOLE_Y+1) % CONSOLE_YSIZE;
 }
 
-pub unsafe fn putc_at(x: usize, y: usize, c: u32) {
+pub unsafe fn putc_at(x: usize, y: usize, c: char) {
+    let fb = get_framebuffer();
+    let info = get_framebuffer_info();
+
     let s = PSF_FONT.as_ref().unwrap().glyph_size();
 
     let g = PSF_FONT.as_ref().unwrap().glyph(c);
     let g = match g {
         Some(g) => g,
         None => {
-            PSF_FONT.as_ref().unwrap().glyph(0).unwrap()
+            PSF_FONT.as_ref().unwrap().glyph('\x00').unwrap()
         }
     };
 
     let stride = (s.0 as usize + 7) / 8;
-    let mut f = alloc::vec![Color::default(); s.0 as usize * s.1 as usize];
 
-    for y in 0..s.1     as usize {
-		for x in 0..s.0 as usize {
-			let byte = y * stride + (x / 8);
-			let bit = 7 - (x % 8);
-			
-			if (g[byte] & (1 << bit)) != 0 {
-                f[x + y * s.0 as usize] = Color::new(255, 255, 255);
-			}
-		}
-	}
+    let mut _i = (x + info.stride * y) * info.bytes_per_pixel;
 
-    batch_draw(x, y, s.0 as usize, s.1 as usize, &f);
+    for y in 0..s.1 as usize {
+        let mut i = _i;
+        for x in 0..s.0 as usize {
+            let byte = y * stride + (x / 8);
+            let bit = 7 - (x % 8);
+
+            if (g[byte] & (1 << bit)) != 0 {
+                plot_color(i, Color::new(255, 255, 255), fb);
+            }
+
+            i += info.bytes_per_pixel;
+        }
+        _i += info.stride * info.bytes_per_pixel;
+    }
 }
 
 #[macro_export]

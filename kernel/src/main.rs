@@ -34,23 +34,23 @@ unsafe fn kernel_main(boot_info: &'static mut bootloader_api::BootInfo) -> ! {
     let phys_mem_offset = x86_64::VirtAddr::new(boot_info.physical_memory_offset.into_option().unwrap());
     let mut mapper = memory::init(phys_mem_offset);
     let mut frame_allocator = memory::BootInfoFrameAllocator::init(&boot_info.memory_regions);
-
     allocator::init(&mut mapper, &mut frame_allocator).unwrap();
 
     drivers::video::init(boot_info);
 
     let i = drivers::video::get_framebuffer_info();
-    let mut f = vec![drivers::video::Color::default(); i.width * i.height];
 
-    for y in 0..i.height {
-        for x in 0..i.width {
-            f[x + y * i.width] = drivers::video::Color::new(
-                (x as f32 / i.width as f32 * 255.0) as u8, (y as f32 / i.height as f32 * 255.0) as u8, 0
+    let mut f = vec![drivers::video::Color::default(); (i.width / 2) * (i.height / 2)];
+
+    for y in 0..(i.height / 2) {
+        for x in 0..(i.width / 2) {
+            f[x + y * (i.width / 2)] = drivers::video::Color::new(
+                (x as f32 / (i.width / 2) as f32 * 255.0) as u8, (y as f32 / (i.height / 2) as f32 * 255.0) as u8, 0
             )
         }
     }
 
-    drivers::video::batch_draw(0, 0, i.width, i.height, &f);
+    drivers::video::batch_draw(i.width / 2, 0, i.width / 2, i.height / 2, &f);
 
     for i in 0x0..=0xF {
         for j in 0x0..=0xF {
